@@ -5,7 +5,9 @@ import 'es6-promise';
 
 if ('production' === process.env.ENV) {
   // In production Reflect with es7-reflect-metadata/reflect-metadata is added
+  //require('es7-reflect-metadata/reflect-metadata');
 
+  require('es7-reflect-metadata/src/global/browser');
   // Zone.js
   require('zone.js/dist/zone-microtask.min');
 
@@ -16,7 +18,6 @@ if ('production' === process.env.ENV) {
 } else {
   // Reflect Polyfill
   require('es7-reflect-metadata/src/global/browser');
-  // In production Reflect with es7-reflect-metadata/reflect-metadata is added
 
   // by webpack.prod.config ProvidePlugin
   Error['stackTraceLimit'] = Infinity;

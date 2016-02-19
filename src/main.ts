@@ -26,9 +26,9 @@ import {AppShell} from './app/app-shell/app-shell';
  */
 document.addEventListener('DOMContentLoaded', function main() {
   bootstrap(AppShell, [
-    ...ENV_PROVIDERS,
-    ...HTTP_PROVIDERS,
-    ...ROUTER_PROVIDERS,
+    ENV_PROVIDERS,
+    HTTP_PROVIDERS,
+    ROUTER_PROVIDERS,
     provide(LocationStrategy, { useClass: HashLocationStrategy })
   ])
   .catch(err => console.error(err));
