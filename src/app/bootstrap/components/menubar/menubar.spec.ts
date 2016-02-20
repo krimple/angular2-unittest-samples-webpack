@@ -4,7 +4,7 @@ import {
 
 import { AsyncTestFn } from 'angular2/testing';
 
-import { MenuBar } from '../../../../../src/app/bootstrap/components/menubar/menubar';
+import { MenuBar } from './menubar';
 
 import { provide } from 'angular2/core';
 

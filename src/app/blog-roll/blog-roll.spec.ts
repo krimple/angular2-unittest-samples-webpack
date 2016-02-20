@@ -1,10 +1,10 @@
 import {provide} from "angular2/src/core/di/provider";
 import {Injector} from "angular2/src/core/di/injector";
-import {BlogRoll} from "../../../src/app/blog-roll/blog-roll";
-import {BlogEntry} from "../../../src/app/domain/blog-entry";
-import {BlogService} from "../../../src/app/services/blog-service";
+import {BlogRoll} from "./blog-roll";
+import {BlogEntry} from "../domain/blog-entry";
+import {BlogService} from "../services/blog-service";
 import {Observable} from 'rxjs/Observable';
-import {MarkdownService} from '../../../src/app/services/markdown-service';
+import {MarkdownService} from '../services/markdown-service';
 import {Router} from 'angular2/router';
 
 

@@ -6,7 +6,7 @@ import {
 
 import { AsyncTestFn } from 'angular2/testing';
 
-import { BootstrapCol } from '../../../../src/app/bootstrap/containers/bscol';
+import { BootstrapCol } from './bscol';
 
 import { provide } from 'angular2/core';
 

@@ -22,6 +22,7 @@ app.listen(3000, function() {
 */
 
 var express = require('express');
+var morgan = require('morgan');
 var http = require('http');
 var path = require('path');
 var jsonServer = require('json-server');
@@ -42,6 +43,7 @@ var jsonRouter = jsonServer.router('db.json');
 // CONFIGURE Express App Server
 var app = express();
 
+app.use(morgan('dev'));
 // add route for JSON stuff
 app.use('/api', jsonRouter); // use json middleware in /api
 
@@ -50,6 +52,7 @@ app.use(express.static(
   path.join(__dirname, 'dist')));
 
 app.use( errorHandler.httpError(404) );
+
 app.use( handler );
 
 // launch a HTTP server running express (which is configured

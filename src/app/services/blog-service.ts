@@ -5,6 +5,7 @@ import {Inject} from 'angular2/core';
 import {Injectable} from 'angular2/core';
 import {BlogEntry} from '../domain/blog-entry';
 import 'rxjs/add/operator/map';
+import {RequestOptionsArgs} from 'angular2/http';
 
 @Injectable()
 export class BlogService {
@@ -12,7 +13,7 @@ export class BlogService {
     constructor(private http: Http) {
        var headers: Headers = new Headers();
        headers.append('content-type', 'application/json; charset=utf-8');
-       this.opts = new RequestOptions();
+       this.opts = new RequestOptions({headers: headers});
        this.opts.headers = headers;
     }
 

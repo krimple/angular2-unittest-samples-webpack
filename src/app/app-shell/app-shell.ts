@@ -41,7 +41,7 @@ import {
 @RouteConfig([
   new Route({path: '/blogroll', component: BlogRoll, name: 'BlogRoll', useAsDefault: true}),
   new Route({path: '/blogeditor', component: BlogEditor, name: 'BlogEditor'}),
-  new Route({path: '/blogeditor/:id˜', component: BlogEditor, name: 'BlogEditorById'})
+  new Route({path: '/blogeditor/:id', component: BlogEditor, name: 'BlogEditorById'})
 ])
 export class AppShell {
 

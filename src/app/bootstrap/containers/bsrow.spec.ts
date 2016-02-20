@@ -6,7 +6,7 @@ import {
 
 import { AsyncTestFn } from 'angular2/testing';
 
-import { BootstrapRow } from '../../../../src/app/bootstrap/containers/bsrow';
+import { BootstrapRow } from './bsrow';
 
 import { provide } from 'angular2/core';
 

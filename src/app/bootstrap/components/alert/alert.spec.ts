@@ -1,21 +1,34 @@
 import {
-  describe, expect, it, injectAsync, TestComponentBuilder, beforeEachProviders, beforeEach, inject
+  beforeEach, describe, expect, it, injectAsync, TestComponentBuilder
 } from 'angular2/testing';
 
-import { Alert } from '../../../../../src/app/bootstrap/components/alert/alert';
+import {Alert} from './alert';
 
-import { provide } from 'angular2/core';
 
 describe('Alert Component', () => {
 
-  it('should display message', injectAsync([TestComponentBuilder], (tcb) => {
-    return tcb.createAsync(Alert).then((fixture) => {
-      fixture.debugElement.componentInstance.message = {text: "boo!"};
-      fixture.detectChanges();
-      var compiled = fixture.debugElement.nativeElement;
-      expect(compiled.innerHTML).toContain("boo!");
+  var fixture;
 
+  beforeEach(injectAsync([TestComponentBuilder], (tcb) => {
+      return tcb.createAsync(Alert).then((_fixture_) => {
+      fixture = _fixture_;
     });
   }));
+
+  it('should display message', () => {
+      fixture.debugElement.componentInstance.message = {text: "boo!"};
+      fixture.detectChanges();
+      var compiled = fixture.nativeElement.querySelector('.alert');
+      expect(compiled.innerHTML).toContain("boo!");
+  });
+
+  it('should be dismissed when the button is checked', () => {
+      fixture.debugElement.componentInstance.message = {text: "boo!"};
+      fixture.detectChanges();
+      fixture.debugElement.componentInstance.dismiss();
+      fixture.detectChanges();
+      var compiled = fixture.nativeElement.querySelector('.alert');
+      expect(compiled.innerHTML).not.toContain("boo!");
+  });
 
 });

@@ -11,7 +11,7 @@ import {
 
 // TODO - hating this multiple subdir thing - need a root dir
 import { AlertMessage }
-from '../../../../../src/app/bootstrap/components/alert/alert-message';
+from './alert-message';
 
 describe('Alert Message', () => {
 
@@ -22,4 +22,3 @@ describe('Alert Message', () => {
   });
 
 });
-

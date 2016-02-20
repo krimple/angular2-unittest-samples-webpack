@@ -5,7 +5,7 @@ import {
 import { AsyncTestFn } from 'angular2/testing';
 
 import { provide } from 'angular2/core';
-import {BootstrapContainer} from '../../../../src/app/bootstrap/containers/container';
+import {BootstrapContainer} from './container';
 
 describe('Container', () => {
 
