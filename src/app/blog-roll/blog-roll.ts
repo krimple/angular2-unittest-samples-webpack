@@ -12,24 +12,30 @@ import {OnInit} from 'angular2/core';
 @Component({
     bindings: [BlogService, MarkdownService],
     template: `
-    <div *ngFor="#blog of blogs">
-      <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-5">
-          <h3><a (click)="editBlogEntry(blog)" [routerLink]="['BlogEditorById', {id: blog.id}]">
-                    {{ blog.title }}
-               </a>
-          </h3>
-        </div>
-      </div>
-      <div class="title">Content (Rendered)</div>
-      <div class="row panel">
-
-        <div class="col-lg-1"></div>
-        <div class="col-lg-8"
-               [innerHtml]="blog.contentRendered"></div>
-      </div>
+    <div class="jumbotron">
+    <h3>This is a sample blog content editor</h3>
     </div>
+    <p><a [routerLink]="['BlogEditor']"><i class="glyphicon glyphicon-plus-sign">Add...</i></a></p>
+    <table class="table table-bordered table-condensed">
+    <tr>
+      <th>Actions</th>
+      <th>Title</th>
+      <th>Content</th>
+    </tr>
+    <tr *ngFor="#blog of blogs">
+      <td>
+        <a href="#" (click)="editBlogEntry(blog)"><i class="glyphicon glyphicon-edit"></i></a>
+        &nbsp;
+        <a href="#" (click)="deleteBlogEntry(blog)"><i class="glyphicon glyphicon-remove"></i></a>
+      </td>
+      <td class="table-cell">
+        <span class="title">{{ blog.title }}</span>
+      </td>
+      <td>
+        <div [innerHtml]="blog.contentRendered"></div>
+      </td>
+    </tr>
+  </table>
     `,
     selector: 'blog-roll',
     directives: [ROUTER_DIRECTIVES, CORE_DIRECTIVES, BootstrapRow, BootstrapCol]
@@ -43,7 +49,6 @@ export class BlogRoll implements OnInit {
     constructor(private blogService: BlogService,
                 markdownService: MarkdownService,
                 router: Router) {
-        console.log('***** Initializing BlogRoll component ********');
         this.markdownService = markdownService;
         this.router = router;
     }
@@ -55,7 +60,6 @@ export class BlogRoll implements OnInit {
     loadBlogEntries() {
         this.blogService.getBlogs().subscribe(
             (data: Array<BlogEntry>) => {
-                console.log('data is', data);
                 this.blogs = data;
             },
             (error: Object) => {
@@ -82,6 +86,16 @@ export class BlogRoll implements OnInit {
 
     editBlogEntry(blog: BlogEntry) {
         this.router.navigate(['BlogEditorById', { id: blog.id }]);
+        return false;
+    }
+
+    deleteBlogEntry(blog: BlogEntry) {
+      if(confirm(`Are you sure you want to delete this blog entry (${blog.title})?`)) {
+        this.blogService.deleteBlogEntry(blog.id)
+          .subscribe(
+            () => { this.loadBlogEntries; },
+            (err) => { alert(`Delete failed. Reason: ${err}`); } );
+      }
     }
 
     clearMessage() {

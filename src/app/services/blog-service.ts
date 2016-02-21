@@ -29,6 +29,10 @@ export class BlogService {
         }
     }
 
+    deleteBlogEntry(id: number) {
+          return this.http.delete('/api/blogs/' + id);
+    }
+
   getBlog(id: number): any {
     return this.http.get('/api/blogs/' + id)
     .map((res: Response) => {

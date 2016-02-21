@@ -105,4 +105,16 @@ describe('Blog Service', () => {
         });
     });
   }), 300);
+  it('should delete an existing blog entry',
+    injectAsync([XHRBackend, BlogService], (mockBackend, blogService) => {
+    return new Promise((resolve, reject) => {
+      mockBackend.connections.subscribe(connection => {
+        connection.mockRespond(new ResponseOptions({status: 201}));
+      });
+
+      blogService.deleteBlogEntry(23).then(
+        (successResult) => { resolve(); },
+        (errorResult) => { reject(errorResult)});
+    });
+  }), 300);
 });

@@ -2,55 +2,63 @@ import {BlogEntry} from '../domain/blog-entry';
 import {Component} from 'angular2/core';
 import {RouteParams} from 'angular2/router';
 import {BlogService} from '../services/blog-service';
-import {BootstrapRow} from '../bootstrap/containers/bsrow';
-import {BootstrapCol} from '../bootstrap/containers/bscol';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {MarkdownService} from '../services/markdown-service';
 import {Router} from 'angular2/router';
+import {OnInit} from 'angular2/core';
 
 
 @Component({
   providers: [BlogService, MarkdownService],
-  directives: [FORM_DIRECTIVES, BootstrapRow, BootstrapCol],
+  directives: [FORM_DIRECTIVES],
   template: `
-      <bs-row>
-        <bs-col>
-        <h4>Title</h4>
-        <input type="text" #title
-          [(ngModel)]="blog.title"><br/>
-        <h4>Content (use Markdown)</h4>
-        <textarea style="width: 100%; height: 5em;" #markdown
-          (change)="render(blog)"
-          [(ngModel)]="blog.contentMarkdown"></textarea>
-        <h4>Content (preview)</h4>
-        <div [innerHtml]="blog.contentRendered"></div>
-        </bs-col>
-      </bs-row>
-      <row>
-        <button (click)="saveBlog(blog)">Save</button>
-      </row>
+      <div class="jumbotron">
+        <h3>Enter/edit your blog content below...</h3>
+      </div>
+      <form>
+        <div class="form-group row">
+          <label for="blog-title" class="col-sm-2 form-control-label">Title</label>
+          <div class="col-sm-10">
+            <input id="blog-title" class="form-control" type="text" #title [(ngModel)]="blog.title">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="blog-content" class="col-sm-2 form-control-label">Content</label>
+          <div class="col-sm-10">
+              <textarea id="blog-content"
+                class="form-control"
+                #markdown
+                (keyup)="render(blog)"
+                [(ngModel)]="blog.contentMarkdown"></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" (click)="saveBlog(blog)">Save</button>
+        <fieldset>
+          <div class="form-group row">
+            <div class="col-sm-2">&nbsp;</div>
+            <label class="col-sm-2 form-control-label">Content Preview</label>
+            <div class="jumbotron col-sm-8">
+              <div [innerHtml]="blog.contentRendered"></div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
  `
 })
-export class BlogEditor {
+export class BlogEditor implements OnInit {
   blog: BlogEntry;
-  markdownService: MarkdownService;
-  blogService: BlogService;
-  router: Router;
 
-  constructor(params: RouteParams,
-              markdownService: MarkdownService,
-              blogService: BlogService,
-              router: Router) {
-    // hold on to services
-    this.markdownService = markdownService;
-    this.blogService = blogService;
-    this.router = router;
+  constructor(private params: RouteParams,
+              private markdownService: MarkdownService,
+              private blogService: BlogService,
+              private router: Router) { }
 
+  ngOnInit() {
     // create a prototypical entry
     this.blog = new BlogEntry('', '', 'Enter your title', null);
-    let id = params.get('id');
+    let id = this.params.get('id');
     if (id) {
-      blogService.getBlog(Number.parseInt(id))
+      this.blogService.getBlog(Number.parseInt(id))
         .subscribe((blogEntry: BlogEntry) => {
           this.blog = blogEntry;
         });
