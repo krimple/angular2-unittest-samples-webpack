@@ -1,16 +1,28 @@
 {
   "blogs": [
     {
-      "title": "asdfas",
-      "contentRendered": "<p>Enter your asdfasfadsf</p>\n",
-      "contentMarkdown": "Enter your asdfasfadsf",
+      "title": "A new blog entry",
+      "contentRendered": "<p>Just <em>for</em> <em>you</em></p>\n",
+      "contentMarkdown": "Just *for* _you_",
+      "id": 1
+    },
+    {
+      "title": "Demo",
+      "contentRendered": "<h3>Big thing</h3>",
+      "contentMarkdown": "<h3>Big thing</h3>",
+      "id": 2
+    },
+    {
+      "title": "Once upon a time",
+      "contentRendered": "<ul>\n<li>This was fun</li>\n<li>That was not</li>\n</ul>\n",
+      "contentMarkdown": "* This was fun\n* That was not",
       "id": 3
     },
     {
-      "title": "This is something",
-      "contentRendered": "<p><b>This is so cool</b> Really, I mean i!!!\n<br></p>\n<ul>\n<li>one</li>\n<li>Two</li>\n</ul>",
-      "contentMarkdown": "<b>This is so cool</b> Really, I mean i!!!\n<br>\n<ul>\n<li>one</li>\n<li>Two</li>\n</ul>",
-      "id": 6
+      "title": "Data",
+      "contentRendered": "<p>Testing</p>\n",
+      "contentMarkdown": "Testing",
+      "id": 4
     }
   ]
 }

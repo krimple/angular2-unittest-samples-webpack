@@ -105,6 +105,7 @@ describe('Blog Service', () => {
         });
     });
   }), 300);
+
   it('should delete an existing blog entry',
     injectAsync([XHRBackend, BlogService], (mockBackend, blogService) => {
     return new Promise((resolve, reject) => {

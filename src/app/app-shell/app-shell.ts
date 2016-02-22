@@ -7,49 +7,17 @@ import {Component} from 'angular2/core';
 import {CORE_DIRECTIVES} from 'angular2/common';
 import {BlogRoll} from '../blog-roll/blog-roll';
 import {BlogEditor} from '../blog-editor/blog-editor';
-import {
-  RouterLink,
-  ROUTER_DIRECTIVES,
-  RouteConfig,
-  Route,
-  RouterOutlet,
-  Location,
-  RouteParams
-} from 'angular2/router';
-
 
 @Component({
   selector: 'app-shell',
   template: `
     <bootstrap-container>
-        <menubar>
-            <li class="pure-menu-item"><a [routerLink]="['BlogRoll']">Blog Roll</a></li>
-            <li class="pure-menu-item"><a [routerLink]="['BlogEditor']">Blog Editor</a></li>
-       </menubar>
-
-       <!-- messages, if any -->
-       <row *ngFor="#message of messages">
-            <alert [message]="message"></alert>
-       </row>
-
-       <router-outlet></router-outlet>
+        <blog-editor *ngIf="blog" [blog]="blog"></blog-editor>
+       <blog-roll (edit)="setBlog(blog)"></blog-roll>
     </bootstrap-container>
     `,
-  directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, BootstrapContainer, MenuBar, Alert],
-  bindings: [MessageService]
+  directives: [CORE_DIRECTIVES, BlogRoll, BlogEditor, BootstrapContainer]
 })
-@RouteConfig([
-  new Route({path: '/blogroll', component: BlogRoll, name: 'BlogRoll', useAsDefault: true}),
-  new Route({path: '/blogeditor', component: BlogEditor, name: 'BlogEditor'}),
-  new Route({path: '/blogeditor/:id', component: BlogEditor, name: 'BlogEditorById'})
-])
 export class AppShell {
-
-  messages: AlertMessage[];
-
-  constructor(private messageService: MessageService) {
-    this.messages = messageService.messages;
-    messageService.add('this is on fire!');
-  }
 
 }

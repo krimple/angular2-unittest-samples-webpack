@@ -1,27 +1,74 @@
-import {AlertMessage} from "../bootstrap/components/alert/alert-message";
-import {MessageService} from "../services/message-service";
 import {AppShell} from "../app-shell/app-shell";
 import {
-  it,
-  inject,
-  injectAsync,
-  beforeEachProviders,
-  TestComponentBuilder
+    it,
+    inject,
+    injectAsync,
+    beforeEachProviders,
+    TestComponentBuilder
 } from 'angular2/testing';
+import {BlogRoll} from '../blog-roll/blog-roll';
+import {BlogEntry} from '../domain/blog-entry';
+import {provide} from 'angular2/core';
+import {BlogEditor} from '../blog-editor/blog-editor';
+import {Component} from 'angular2/core';
 
 describe('Application Shell', () => {
-  var shell: AppShell;
-  it('Can be created', () => {
-    var messages:AlertMessage[] = [
-      new AlertMessage("That should hurt"),
-      new AlertMessage("What was that about?")
-    ];
-    var messageService:MessageService = new MessageService();
-    messageService.add("That should hurt");
-    messageService.add("What was that about?");
-    shell = new AppShell(messageService);
-    expect(shell).toBeDefined();
-    expect(shell.messages[0].text).toContain("That should hurt");
-    expect(shell.messages[1].text).toContain("What was that about?");
-  });
+    var shell: AppShell;
+
+    beforeEachProviders(() => {
+        return [
+            provide(BlogRoll, {useClass: FakeBlogRoll}),
+            provide(BlogEditor, {useClass: FakeBlogEditor})
+        ];
+    });
+
+    it('Can be created', injectAsync([TestComponentBuilder], (tcb) => {
+        return tcb.createAsync(AppShell)
+            .then((fixture) => {
+                fixture.detectChanges();
+                let blogRoll = fixture.nativeElement.getElementsByTagName('<blog-roll>');
+                expect(blogRoll).toBeDefined();
+            });
+    }));
 });
+
+@Component({})
+class FakeBlogRoll extends BlogRoll {
+
+    ngOnInit() {
+    }
+
+    refresh() {
+    }
+
+    loadBlogEntries() {
+    }
+
+    render(blog: BlogEntry) {
+    }
+
+    newBlogEntry() {
+    }
+
+    editBlogEntry(blog: BlogEntry) {
+    }
+
+    deleteBlogEntry(blog: BlogEntry) {
+    }
+
+    clearMessage() {
+    }
+}
+
+@Component({})
+class FakeBlogEditor extends BlogEditor {
+
+    ngOnInit() {
+    }
+
+    render(blog: BlogEntry) {
+    }
+
+    saveBlog(blog: BlogEntry) {
+    }
+}
