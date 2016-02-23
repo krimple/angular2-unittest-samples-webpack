@@ -61,16 +61,15 @@ describe('Blog Roll Component', () => {
 
   it('Shows list of blog items by default', injectAsync([TestComponentBuilder], (tcb) => {
     return tcb
-      .overrideTemplate(BlogRoll, html)
       .createAsync(BlogRoll)
       .then((fixture) => {
         fixture.detectChanges();
         let nativeElement = fixture.nativeElement;
-        // the element should always start as either undefined or null
-        expect(nativeElement.querySelector('blog-editor') === undefined ||
-               nativeElement.querySelector('blog-editor') === null).toBe(true);
-        expect(nativeElement.querySelector('blog-content')).toBeDefined();
+        // start with editor panel hidden and blog roll visible
+        expect(nativeElement.querySelector('#blog-editor-panel') === null).toBe(true);
+        expect(nativeElement.querySelector('#blog-roll-panel') === null).toBe(false);
 
+        // make sure we have two rows - one for the heading and one for data
         let trs = nativeElement.querySelectorAll('tr');
         expect(trs.length).toBe(2);
 
@@ -78,6 +77,28 @@ describe('Blog Roll Component', () => {
         let tdRenderedContent = trs[1].children[2].innerHTML;
         expect(tdTitleContent).toContain('The title');
         expect(tdRenderedContent).toContain('Hi there');
+      });
+  }));
+
+  it('Should show blog editor div when New is clicked...', injectAsync([TestComponentBuilder], (tcb) => {
+     return tcb
+      .createAsync(BlogRoll)
+      .then((fixture) => {
+        let nativeElement = fixture.nativeElement;
+        fixture.detectChanges();
+
+        // we start with the blog roll panel visible
+        expect(fixture.componentInstance.editing).toBe(false);
+        expect(nativeElement.querySelector('#blog-editor-panel') === null).toBe(true);
+        expect(nativeElement.querySelector('#blog-roll-panel') === null).toBe(false);
+
+
+        // trigger the "new" button and swap visible panels
+        fixture.nativeElement.querySelector('i.glyphicon-plus-sign').click();
+        fixture.detectChanges();
+        expect(fixture.componentInstance.editing).toBe(true);
+        expect(nativeElement.querySelector('#blog-editor-panel') === null).toBe(false);
+        expect(nativeElement.querySelector('#blog-roll-panel') === null).toBe(true);
       });
   }));
 });
