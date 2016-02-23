@@ -29,7 +29,6 @@ describe('Blog Roll Component', () => {
     markdownService: MarkdownService,
     html: string;
 
-  // see https://developers.livechatinc.com/blog/testing-angular-2-apps-routeroutlet-and-http/
   beforeEachProviders(() => [
       HTTP_PROVIDERS,
       BlogService,
@@ -60,18 +59,23 @@ describe('Blog Roll Component', () => {
       });
   }));
 
-  it('Can be created', injectAsync([TestComponentBuilder], (tcb) => {
+  it('Shows list of blog items by default', injectAsync([TestComponentBuilder], (tcb) => {
     return tcb
       .overrideTemplate(BlogRoll, html)
       .createAsync(BlogRoll)
       .then((fixture) => {
         fixture.detectChanges();
-        let blogRoll = fixture.nativeElement;
-        let trs = blogRoll.getElementsByTagName('tr');
-        expect(trs.length).toBe(1);
+        let nativeElement = fixture.nativeElement;
+        // the element should always start as either undefined or null
+        expect(nativeElement.querySelector('blog-editor') === undefined ||
+               nativeElement.querySelector('blog-editor') === null).toBe(true);
+        expect(nativeElement.querySelector('blog-content')).toBeDefined();
 
-        let tdTitleContent = trs[0].children[0].innerHtml;
-        let tdRenderedContent = trs[0].children[1].innerHtml;
+        let trs = nativeElement.querySelectorAll('tr');
+        expect(trs.length).toBe(2);
+
+        let tdTitleContent = trs[1].children[0].innerHtml;
+        let tdRenderedContent = trs[1].children[1].innerHtml;
         expect(tdTitleContent).toContain('Why not?');
         expect(tdRenderedContent).toContain('Hi there');
       });

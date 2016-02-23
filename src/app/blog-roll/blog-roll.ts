@@ -12,7 +12,7 @@ import {Output} from 'angular2/core';
     bindings: [BlogService, MarkdownService],
     template: `
    <div class="row">
-    <div class="col-sm-12" *ngIf="editing">
+    <div id="blog-editor" class="col-sm-12" *ngIf="editing">
           <form>
             <div class="form-group row">
               <label for="blog-title" class="col-sm-2 form-control-label">Title</label>
@@ -38,7 +38,7 @@ import {Output} from 'angular2/core';
           </form>
      </div>
 
-      <div class="col-sm-12" *ngIf="!editing">
+      <div id="blog-content" class="col-sm-12" *ngIf="!editing">
       <p><a (click)="newBlogEntry()"><i class="glyphicon glyphicon-plus-sign">Add...</i></a></p>
       <table class="table table-bordered table-condensed">
         <tr>
