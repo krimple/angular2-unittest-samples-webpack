@@ -21,7 +21,6 @@ import {HTTP_PROVIDERS} from 'angular2/http';
 import {MockConnection} from 'angular2/src/http/backends/mock_backend';
 import {ResponseOptions} from 'angular2/http';
 import {Response} from 'angular2/http';
-import {BlogEditor} from '../blog-editor/blog-editor';
 import {Instruction} from 'angular2/router';
 import {Component} from 'angular2/core';
 

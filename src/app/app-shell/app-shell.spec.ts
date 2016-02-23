@@ -9,7 +9,6 @@ import {
 import {BlogRoll} from '../blog-roll/blog-roll';
 import {BlogEntry} from '../domain/blog-entry';
 import {provide} from 'angular2/core';
-import {BlogEditor} from '../blog-editor/blog-editor';
 import {Component} from 'angular2/core';
 
 describe('Application Shell', () => {
@@ -17,8 +16,6 @@ describe('Application Shell', () => {
 
     beforeEachProviders(() => {
         return [
-            provide(BlogRoll, {useClass: FakeBlogRoll}),
-            provide(BlogEditor, {useClass: FakeBlogEditor})
         ];
     });
 

@@ -6,7 +6,6 @@ import {AlertMessage} from '../bootstrap/components/alert/alert-message';
 import {Component} from 'angular2/core';
 import {CORE_DIRECTIVES} from 'angular2/common';
 import {BlogRoll} from '../blog-roll/blog-roll';
-import {BlogEditor} from '../blog-editor/blog-editor';
 
 @Component({
   selector: 'app-shell',
@@ -15,7 +14,7 @@ import {BlogEditor} from '../blog-editor/blog-editor';
         <blog-roll (edit)="setBlog(blog)"></blog-roll>
       </div>
     `,
-  directives: [CORE_DIRECTIVES, BlogRoll, BlogEditor, BootstrapContainer]
+  directives: [CORE_DIRECTIVES, BlogRoll, BootstrapContainer]
 })
 export class AppShell {
 

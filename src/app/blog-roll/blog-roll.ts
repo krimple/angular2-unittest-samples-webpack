@@ -7,7 +7,6 @@ import {MarkdownService} from '../services/markdown-service';
 import {OnInit} from 'angular2/core';
 import {EventEmitter} from 'angular2/core';
 import {Output} from 'angular2/core';
-import {BlogEditor} from '../blog-editor/blog-editor';
 
 @Component({
     bindings: [BlogService, MarkdownService],
