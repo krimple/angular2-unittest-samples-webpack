@@ -1,5 +1,5 @@
 
-import {BlogService} from "../../../src/app/services/blog-service";
+import {BlogService} from "./blog-service";
 import {
   describe,
   expect,
@@ -13,7 +13,7 @@ import {Headers, HTTP_PROVIDERS, BaseRequestOptions, XHRBackend, Response} from 
 
 import {provide} from 'angular2/core';
 import {MockBackend} from 'angular2/http/testing';
-import {BlogEntry} from '../../../src/app/domain/blog-entry';
+import {BlogEntry} from '../domain/blog-entry';
 import {MockConnection} from 'angular2/src/http/backends/mock_backend';
 import {ResponseOptions} from 'angular2/http';
 
@@ -113,7 +113,7 @@ describe('Blog Service', () => {
         connection.mockRespond(new ResponseOptions({status: 201}));
       });
 
-      blogService.deleteBlogEntry(23).then(
+      blogService.deleteBlogEntry(23).subscribe(
         (successResult) => { resolve(); },
         (errorResult) => { reject(errorResult)});
     });

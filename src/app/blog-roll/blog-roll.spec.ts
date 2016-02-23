@@ -50,7 +50,7 @@ describe('Blog Roll Component', () => {
               body: [
                 {
                   id: 26,
-                  title: "Why not?",
+                  title: "The title",
                   contentRendered: "<p><b>Hi there</b></p>",
                   contentMarkdown: "*Hi there*"
                 }]
@@ -74,27 +74,12 @@ describe('Blog Roll Component', () => {
         let trs = nativeElement.querySelectorAll('tr');
         expect(trs.length).toBe(2);
 
-        let tdTitleContent = trs[1].children[0].innerHtml;
-        let tdRenderedContent = trs[1].children[1].innerHtml;
-        expect(tdTitleContent).toContain('Why not?');
+        let tdTitleContent = trs[1].children[1].innerHTML;
+        let tdRenderedContent = trs[1].children[2].innerHTML;
+        expect(tdTitleContent).toContain('The title');
         expect(tdRenderedContent).toContain('Hi there');
       });
   }));
-
-  //it('Can navigate to edit pane', injectAsync([TestComponentBuilder], (tcb) => {
-  //  return tcb
-  //    .overrideTemplate(BlogRoll, html)
-  //    .createAsync(BlogRoll)
-  //    .then((fixture) => {
-  //      fixture.detectChanges();
-  //      let result = fixture.componentInstance.editBlogEntry(
-  //        fixture.componentInstance.blogs[0]
-  //      );
-  //      // return false for event bubble cancel
-  //      expect(result).toBe(false);
-  //      expect(router.navigate).toHaveBeenCalled();
-  //    });
-  //}));
 });
 
 class MockMarkdownService extends MarkdownService {

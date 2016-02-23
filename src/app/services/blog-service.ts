@@ -29,8 +29,8 @@ export class BlogService {
         }
     }
 
-    deleteBlogEntry(id: number) {
-          return this.http.delete('/api/blogs/' + id);
+    deleteBlogEntry(id: number): Observable<Response> {
+        return this.http.delete('/api/blogs/' + id);
     }
 
   getBlog(id: number): any {
