@@ -1,28 +1,10 @@
 {
   "blogs": [
     {
-      "title": "A new blog entry",
-      "contentRendered": "<p>Just <em>for</em> <em>you</em></p>\n",
-      "contentMarkdown": "Just *for* _you_",
+      "title": "A new spaceship",
+      "contentRendered": "<p>One two three\n<em>four</em></p>\n",
+      "contentMarkdown": "One two three\n_four_",
       "id": 1
-    },
-    {
-      "title": "Demo",
-      "contentRendered": "<h3>Big thing</h3>",
-      "contentMarkdown": "<h3>Big thing</h3>",
-      "id": 2
-    },
-    {
-      "title": "Once upon a time",
-      "contentRendered": "<ul>\n<li>This was fun</li>\n<li>That was not</li>\n</ul>\n",
-      "contentMarkdown": "* This was fun\n* That was not",
-      "id": 3
-    },
-    {
-      "title": "Data",
-      "contentRendered": "<p>Testing</p>\n",
-      "contentMarkdown": "Testing",
-      "id": 4
     }
   ]
 }

@@ -13,13 +13,6 @@ import {Input} from 'angular2/core';
   selector: 'blog-editor',
   directives: [FORM_DIRECTIVES],
   template: `
-    <div class="modal fade" tabindex="-1" role="dialog">
-     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Add/Edit Blog Entry</h4>
-        </div>
-        <div class="modal-body">
           <form>
             <div class="form-group row">
               <label for="blog-title" class="col-sm-2 form-control-label">Title</label>
@@ -37,7 +30,7 @@ import {Input} from 'angular2/core';
                     [(ngModel)]="blog.contentMarkdown"></textarea>
               </div>
             </div>
-            <button class="btn btn-primary" (click)="saveBlog(blog)">Save</button>
+            <button class="btn btn-primary" (click)="saveBlog()">Save</button>
             <fieldset>
               <div class="form-group row">
                 <div class="col-sm-2">&nbsp;</div>
@@ -48,9 +41,6 @@ import {Input} from 'angular2/core';
               </div>
             </fieldset>
           </form>
-          </div>
-     </div>
-    </div>
  `
 })
 export class BlogEditor implements OnInit {
@@ -62,13 +52,8 @@ export class BlogEditor implements OnInit {
 
   ngOnInit() {
     // create a prototypical entry
-    this.blog = new BlogEntry('', '', 'Enter your title', null);
-    let id = null; // todo
-    if (id) {
-      this.blogService.getBlog(Number.parseInt(id))
-        .subscribe((blogEntry: BlogEntry) => {
-          this.blog = blogEntry;
-        });
+    if (!this.blog) {
+        this.blog = new BlogEntry('', '', 'Enter your title', null);
     }
   }
 
@@ -77,8 +62,8 @@ export class BlogEditor implements OnInit {
     console.log('change', blog);
   }
 
-  saveBlog(blog: BlogEntry) {
-   this.blogService.saveBlog(blog)
+  saveBlog() {
+   this.blogService.saveBlog(this.blog)
     .subscribe(() => {
       this.refresh.emit(null);
     });

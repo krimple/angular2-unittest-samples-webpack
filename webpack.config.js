@@ -66,6 +66,7 @@ module.exports = {
       { test: /\.html$/,  loader: 'raw-loader', exclude: [ root('src/index.html') ] }
 
       // if you add a loader include the resolve file extension above
+      
     ]
   },
 

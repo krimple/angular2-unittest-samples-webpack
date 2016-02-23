@@ -11,10 +11,9 @@ import {BlogEditor} from '../blog-editor/blog-editor';
 @Component({
   selector: 'app-shell',
   template: `
-    <bootstrap-container>
-        <blog-editor *ngIf="blog" [blog]="blog"></blog-editor>
-       <blog-roll (edit)="setBlog(blog)"></blog-roll>
-    </bootstrap-container>
+      <div class="container">
+        <blog-roll (edit)="setBlog(blog)"></blog-roll>
+      </div>
     `,
   directives: [CORE_DIRECTIVES, BlogRoll, BlogEditor, BootstrapContainer]
 })

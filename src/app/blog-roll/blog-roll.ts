@@ -12,11 +12,34 @@ import {BlogEditor} from '../blog-editor/blog-editor';
 @Component({
     bindings: [BlogService, MarkdownService],
     template: `
-    <blog-editor
-         [blog]="blog"
-         (refresh)="refresh()"></blog-editor>
-    <div class="row">
-     <div class="col-sm-12">
+   <div class="row">
+    <div class="col-sm-12" *ngIf="editing">
+          <form>
+            <div class="form-group row">
+              <label for="blog-title" class="col-sm-2 form-control-label">Title</label>
+              <div class="col-sm-10">
+                <input id="blog-title" class="form-control" type="text" #title [(ngModel)]="blog.title">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="blog-content" class="col-sm-2 form-control-label">Content</label>
+              <div class="col-sm-10">
+                  <textarea id="blog-content"
+                    class="form-control"
+                    #markdown
+                    (keyup)="render(blog)"
+                    [(ngModel)]="blog.contentMarkdown"></textarea>
+              </div>
+            </div>
+            <button class="btn btn-primary" (click)="saveBlogEntry(blog)">Save</button>
+            <h3>Content preview</h3>
+            <div class="jumbotron">
+              <div [innerHtml]="blog.contentRendered"></div>
+            </div>
+          </form>
+     </div>
+
+      <div class="col-sm-12" *ngIf="!editing">
       <p><a (click)="newBlogEntry()"><i class="glyphicon glyphicon-plus-sign">Add...</i></a></p>
       <table class="table table-bordered table-condensed">
         <tr>
@@ -38,7 +61,7 @@ import {BlogEditor} from '../blog-editor/blog-editor';
             <span class="title">{{ blog.title }}</span>
          </td>
          <td>
-           <div [innerHtml]="blog.contentRendered"></div>
+           <div [innerHtml]="blog.contentMarkdown"></div>
          </td>
         </tr>
       </table>
@@ -46,11 +69,13 @@ import {BlogEditor} from '../blog-editor/blog-editor';
   </div>
     `,
     selector: 'blog-roll',
-    directives: [CORE_DIRECTIVES, BlogEditor]
+    directives: [CORE_DIRECTIVES]
 })
 export class BlogRoll implements OnInit {
     blogs: Array<BlogEntry>;
     blog: BlogEntry;
+
+    editing: boolean = false;
 
     message: string;
 
@@ -81,23 +106,29 @@ export class BlogRoll implements OnInit {
     render(blog: BlogEntry) {
         if (blog.contentMarkdown) {
             blog.contentRendered = this.markdownService.toHtml(blog.contentMarkdown);
-            this.blogService
-                .saveBlog(blog)
-                .subscribe(
-                    () => this.message = 'update complete',
-                    (error) => {
-                        console.log(error);
-                    }
-                );
         }
     }
 
     newBlogEntry() {
+        this.editing = true;
         this.blog = new BlogEntry("", "", "", undefined);
     }
 
     editBlogEntry(blog: BlogEntry) {
+        this.editing = true;
         this.blog = blog;
+    }
+
+    saveBlogEntry(blog: BlogEntry) {
+        this.blogService.saveBlog(blog)
+            .subscribe( () => {
+                this.editing = false;
+                this.blog = null;
+                this.refresh();
+            },
+            (err) => {
+                alert(`Blog save failed. ${err}`);
+            });
     }
 
     deleteBlogEntry(blog: BlogEntry) {
