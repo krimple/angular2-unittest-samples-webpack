@@ -28,18 +28,38 @@ import {Component} from 'angular2/core';
 describe('Blog Roll Component...', () => {
   var blogService: BlogService,
     markdownService: MarkdownService,
+    mockBackend: MockBackend,
     html: string;
 
   beforeEachProviders(() => [
-    provide(BlogService, {useClass: MockBlogService}),
+    BlogService,
+    HTTP_PROVIDERS,
+    provide(XHRBackend, {useClass: MockBackend}),
     provide(MarkdownService, {useClass: MockMarkdownService})
   ]);
 
   beforeEach(
-    inject([BlogService, MarkdownService], (_blogService_, _markdownService_) => {
+    inject([BlogService, MarkdownService, XHRBackend], (_blogService_, _markdownService_, _mockBackend_) => {
       blogService = _blogService_;
       markdownService = _markdownService_;
+      mockBackend = _mockBackend_;
     }));
+
+  beforeEach(() => {
+    mockBackend.connections.subscribe(
+      (connection: MockConnection) => {
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+              body: [
+                {
+                  id: 26,
+                  title: 'The title',
+                  contentRendered: '<p><b>Hi there</b></p>',
+                  contentMarkdown: '*Hi there*'
+                }
+              ]
+          })));
+      });
   });
 
 
@@ -120,32 +140,6 @@ describe('Blog Roll Component...', () => {
 class MockMarkdownService extends MarkdownService {
   toHtml(text: string): string {
     return text;
-  }
-}
-
-class MockBlogService extends BlogService {
-
-  getBlogs(): Observable<any> {
-    return Observable.from([
-      {
-        id: 1,
-        title: 'Demo blog entry',
-        contentMarkdown: 'This is *content*',
-        contentRendered: '<p>This is <em>content</em></p>'
-      }
-    ]);
-  }
-
-  saveBlog(blog: BlogEntry): Observable<Response> {
-    return super.saveBlog(blog);
-  }
-
-  deleteBlogEntry(id: number): Observable<Response> {
-    return super.deleteBlogEntry(id);
-  }
-
-  getBlog(id: number): any {
-    return super.getBlog(id);
   }
 }
 
