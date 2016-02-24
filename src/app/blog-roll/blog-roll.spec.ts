@@ -2,6 +2,7 @@ import {
   it,
   xit,
   describe,
+  expect,
   inject,
   injectAsync,
   beforeEach,
@@ -24,15 +25,13 @@ import {Response} from 'angular2/http';
 import {Instruction} from 'angular2/router';
 import {Component} from 'angular2/core';
 
-describe('Blog Roll Component', () => {
+describe('Blog Roll Component...', () => {
   var blogService: BlogService,
     markdownService: MarkdownService,
     html: string;
 
   beforeEachProviders(() => [
-    HTTP_PROVIDERS,
-    BlogService,
-    provide(XHRBackend, {useClass: MockBackend}),
+    provide(BlogService, {useClass: MockBlogService}),
     provide(MarkdownService, {useClass: MockMarkdownService})
   ]);
 
@@ -41,23 +40,8 @@ describe('Blog Roll Component', () => {
       blogService = _blogService_;
       markdownService = _markdownService_;
     }));
+  });
 
-  beforeEach(inject([XHRBackend], (mockBackend) => {
-    mockBackend.connections.subscribe(
-      (connection: MockConnection) => {
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-              body: [
-                {
-                  id             : 26,
-                  title          : 'The title',
-                  contentRendered: '<p><b>Hi there</b></p>',
-                  contentMarkdown: '*Hi there*'
-                }]
-            }
-          )));
-      });
-  }));
 
   it('Shows list of blog items by default', injectAsync([TestComponentBuilder], (tcb) => {
     return tcb
@@ -132,11 +116,36 @@ describe('Blog Roll Component', () => {
         expect(blog.id).toBeDefined();
       });
   }));
-});
 
 class MockMarkdownService extends MarkdownService {
   toHtml(text: string): string {
     return text;
+  }
+}
+
+class MockBlogService extends BlogService {
+
+  getBlogs(): Observable<any> {
+    return Observable.from([
+      {
+        id: 1,
+        title: 'Demo blog entry',
+        contentMarkdown: 'This is *content*',
+        contentRendered: '<p>This is <em>content</em></p>'
+      }
+    ]);
+  }
+
+  saveBlog(blog: BlogEntry): Observable<Response> {
+    return super.saveBlog(blog);
+  }
+
+  deleteBlogEntry(id: number): Observable<Response> {
+    return super.deleteBlogEntry(id);
+  }
+
+  getBlog(id: number): any {
+    return super.getBlog(id);
   }
 }
 

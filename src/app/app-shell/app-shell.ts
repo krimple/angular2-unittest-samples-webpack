@@ -12,5 +12,6 @@ import {BlogRoll} from '../blog-roll/blog-roll';
   directives: [CORE_DIRECTIVES, BlogRoll]
 })
 export class AppShell {
+  constructor() {}
 
 }
