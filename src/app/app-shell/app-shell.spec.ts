@@ -1,4 +1,4 @@
-import {AppShell} from "../app-shell/app-shell";
+import {AppShell} from '../app-shell/app-shell';
 import {
     it,
     inject,

@@ -1,5 +1,5 @@
 
-import {BlogService} from "./blog-service";
+import {BlogService} from './blog-service';
 import {
   describe,
   expect,
@@ -9,8 +9,8 @@ import {
   injectAsync,
   beforeEachProviders
 } from 'angular2/testing';
-import {Headers, HTTP_PROVIDERS, BaseRequestOptions, XHRBackend, Response} from 'angular2/http';
-
+import {Headers, HTTP_PROVIDERS, BaseRequestOptions,
+        XHRBackend, Response} from 'angular2/http';
 import {provide} from 'angular2/core';
 import {MockBackend} from 'angular2/http/testing';
 import {BlogEntry} from '../domain/blog-entry';
@@ -43,8 +43,8 @@ describe('Blog Service', () => {
               body: [
                 {
                   id: 26,
-                  contentRendered: "<p><b>Hi there</b></p>",
-                  contentMarkdown: "*Hi there*"
+                  contentRendered: '<p><b>Hi there</b></p>',
+                  contentMarkdown: '*Hi there*'
                 }]
             }
           )));
@@ -59,7 +59,8 @@ describe('Blog Service', () => {
 
 
 
-  it('should get blogs async', injectAsync([XHRBackend, BlogService], (mockBackend, blogService) => {
+  it('should get blogs async',
+    injectAsync([XHRBackend, BlogService], (mockBackend, blogService) => {
     return new Promise((pass, fail) => {
       mockBackend.connections.subscribe(
         (connection: MockConnection) => {
@@ -68,8 +69,8 @@ describe('Blog Service', () => {
                 body: [
                   {
                     id: 26,
-                    contentRendered: "<p><b>Hi there</b></p>",
-                    contentMarkdown: "*Hi there*"
+                    contentRendered: '<p><b>Hi there</b></p>',
+                    contentMarkdown: '*Hi there*'
                   }]
               }
             )));
@@ -96,7 +97,7 @@ describe('Blog Service', () => {
         connection.mockRespond(new ResponseOptions({status: 200}));
       });
 
-      let data: BlogEntry = new BlogEntry("Blog Entry", "<p><b>Hi</b></p>", "*Hi*", 10);
+      let data: BlogEntry = new BlogEntry('Blog Entry', '<p><b>Hi</b></p>', '*Hi*', 10);
       blogService.saveBlog(data).subscribe(
         (successResult) => {
           expect(successResult).toBeDefined();
@@ -114,8 +115,12 @@ describe('Blog Service', () => {
       });
 
       blogService.deleteBlogEntry(23).subscribe(
-        (successResult) => { resolve(); },
-        (errorResult) => { reject(errorResult)});
+        (successResult) => {
+          resolve();
+        },
+        (errorResult) => {
+          reject(errorResult);
+        });
     });
   }), 300);
 });

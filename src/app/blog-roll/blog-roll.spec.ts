@@ -8,10 +8,10 @@ import {
   beforeEachProviders,
   TestComponentBuilder
 } from 'angular2/testing';
-import {provide} from "angular2/src/core/di/provider";
-import {BlogRoll} from "./blog-roll";
-import {BlogEntry} from "../domain/blog-entry";
-import {BlogService} from "../services/blog-service";
+import {provide} from 'angular2/src/core/di/provider';
+import {BlogRoll} from './blog-roll';
+import {BlogEntry} from '../domain/blog-entry';
+import {BlogService} from '../services/blog-service';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 import {MarkdownService} from '../services/markdown-service';
@@ -30,17 +30,17 @@ describe('Blog Roll Component', () => {
     html: string;
 
   beforeEachProviders(() => [
-      HTTP_PROVIDERS,
-      BlogService,
-      provide(XHRBackend, {useClass: MockBackend}),
-      provide(MarkdownService, {useClass: MockMarkdownService})
+    HTTP_PROVIDERS,
+    BlogService,
+    provide(XHRBackend, {useClass: MockBackend}),
+    provide(MarkdownService, {useClass: MockMarkdownService})
   ]);
 
-  beforeEach(inject([BlogService, MarkdownService, ],
-            (_blogService_, _markdownService_) => {
-    blogService = _blogService_;
-    markdownService = _markdownService_;
-  }));
+  beforeEach(
+    inject([BlogService, MarkdownService], (_blogService_, _markdownService_) => {
+      blogService = _blogService_;
+      markdownService = _markdownService_;
+    }));
 
   beforeEach(inject([XHRBackend], (mockBackend) => {
     mockBackend.connections.subscribe(
@@ -49,10 +49,10 @@ describe('Blog Roll Component', () => {
           new ResponseOptions({
               body: [
                 {
-                  id: 26,
-                  title: "The title",
-                  contentRendered: "<p><b>Hi there</b></p>",
-                  contentMarkdown: "*Hi there*"
+                  id             : 26,
+                  title          : 'The title',
+                  contentRendered: '<p><b>Hi there</b></p>',
+                  contentMarkdown: '*Hi there*'
                 }]
             }
           )));
@@ -80,8 +80,9 @@ describe('Blog Roll Component', () => {
       });
   }));
 
-  it('Should show blog editor div when New is clicked...', injectAsync([TestComponentBuilder], (tcb) => {
-     return tcb
+  it('should show blog editor div when New is clicked...',
+    injectAsync([TestComponentBuilder], (tcb) => {
+    return tcb
       .createAsync(BlogRoll)
       .then((fixture) => {
         let nativeElement = fixture.nativeElement;
@@ -93,12 +94,42 @@ describe('Blog Roll Component', () => {
         expect(nativeElement.querySelector('#blog-roll-panel') === null).toBe(false);
 
 
-        // trigger the "new" button and swap visible panels
+        // trigger the 'new' button and swap visible panels
         fixture.nativeElement.querySelector('i.glyphicon-plus-sign').click();
         fixture.detectChanges();
         expect(fixture.componentInstance.editing).toBe(true);
         expect(nativeElement.querySelector('#blog-editor-panel') === null).toBe(false);
         expect(nativeElement.querySelector('#blog-roll-panel') === null).toBe(true);
+      });
+  }));
+  it('should open the editing pane if the edit button is clicked',
+    injectAsync([TestComponentBuilder], (tcb) => {
+    return tcb
+      .createAsync(BlogRoll)
+      .then((fixture) => {
+        let nativeElement = fixture.nativeElement;
+        fixture.detectChanges();
+        nativeElement.querySelector('i.glyphicon-edit').click();
+        fixture.detectChanges();
+        expect(fixture.componentInstance.editing).toBe(true);
+        let blog = fixture.componentInstance.blog;
+        expect(blog).toBeDefined();
+        expect(blog.id).toBeDefined();
+      });
+  }));
+  it('should open the editing pane if the edit button is clicked',
+    injectAsync([TestComponentBuilder], (tcb) => {
+    return tcb
+      .createAsync(BlogRoll)
+      .then((fixture) => {
+        let nativeElement = fixture.nativeElement;
+        fixture.detectChanges();
+        nativeElement.querySelector('i.glyphicon-edit').click();
+        fixture.detectChanges();
+        expect(fixture.componentInstance.editing).toBe(true);
+        let blog = fixture.componentInstance.blog;
+        expect(blog).toBeDefined();
+        expect(blog.id).toBeDefined();
       });
   }));
 });

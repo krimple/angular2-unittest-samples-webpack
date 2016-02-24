@@ -37,8 +37,8 @@ describe('Blog Entry Domain Class', () => {
 
   it('can be parsed from a json string array', () => {
       let blogEntryJsonData: Array<Object> = [
-        { "id": 1, "contentRendered": "Abc", "contentMarkdown": "def", "title": "title" },
-        { "id": 3, "contentRendered": "Def", "contentMarkdown": "ghi", "title": "title2" }
+        { 'id': 1, 'contentRendered': 'Abc', 'contentMarkdown': 'def', 'title': 'title' },
+        { 'id': 3, 'contentRendered': 'Def', 'contentMarkdown': 'ghi', 'title': 'title2' }
       ];
       let blogEntries: BlogEntry[] = BlogEntry.asBlogEntries(blogEntryJsonData);
       expect(blogEntries[0].id).toBe(1);

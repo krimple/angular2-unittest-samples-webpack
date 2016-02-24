@@ -17,7 +17,8 @@ import {Output} from 'angular2/core';
             <div class="form-group row">
               <label for="blog-title" class="col-sm-2 form-control-label">Title</label>
               <div class="col-sm-10">
-                <input id="blog-title" class="form-control" type="text" #title [(ngModel)]="blog.title">
+                <input id="blog-title" class="form-control"
+                     type="text" #title [(ngModel)]="blog.title">
               </div>
             </div>
             <div class="form-group row">
@@ -39,7 +40,13 @@ import {Output} from 'angular2/core';
      </div>
 
       <div id="blog-roll-panel" class="col-sm-12" *ngIf="!editing">
-      <p><a (click)="newBlogEntry()"><i class="glyphicon glyphicon-plus-sign">Add...</i></a></p>
+      <p>
+        <a (click)="newBlogEntry()">
+           <i class="glyphicon glyphicon-plus-sign">
+             Add...
+           </i>
+         </a>
+      </p>
       <table class="table table-bordered table-condensed">
         <tr>
           <th>Actions</th>
@@ -110,7 +117,7 @@ export class BlogRoll implements OnInit {
 
     newBlogEntry() {
         this.editing = true;
-        this.blog = new BlogEntry("", "", "", undefined);
+        this.blog = new BlogEntry('', '', '', undefined);
     }
 
     editBlogEntry(blog: BlogEntry) {
