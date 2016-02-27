@@ -11,14 +11,12 @@ import {BlogEntry} from '../domain/blog-entry';
 import {provide} from 'angular2/core';
 import {Component} from 'angular2/core';
 import {BlogService} from '../services/blog-service';
-import {HTTP_PROVIDERS} from 'angular2/http';
 
 describe('Application Shell', () => {
     var shell: AppShell;
 
     beforeEachProviders(() => {
         return [
-          HTTP_PROVIDERS,
           BlogService,
           provide(BlogRoll, { useValue: { }})
         ];

@@ -64,6 +64,7 @@ module.exports = {
         loader: 'istanbul-instrumenter-loader',
         exclude: [
           /\.(e2e|spec)\.ts$/,
+           /\.ts$/,   // uncomment this line to get test sources uninstrumented for debugging
           /node_modules/
         ]
       }
