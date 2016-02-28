@@ -20,14 +20,15 @@ export class BlogService {
 
     getBlogs(): Observable<any> {
             return this.http.get('/api/blogs')
-                .map((res: Response) => { return BlogEntry.asBlogEntries(res.json()); });
+                .map((res: Response) => { return BlogEntry.asBlogEntries(res.json()); }, this.getOptions());
     }
 
     saveBlog(blog: BlogEntry): Observable<Response> {
+        console.log('saving', blog.json());
         if (blog.id) {
-            return this.http.put('/api/blogs/' + blog.id, blog.json());
+            return this.http.put('/api/blogs/' + blog.id, blog.json(), this.getOptions());
         } else {
-            return this.http.post('/api/blogs', blog.json());
+            return this.http.post('/api/blogs', blog.json(), this.getOptions());
         }
     }
 

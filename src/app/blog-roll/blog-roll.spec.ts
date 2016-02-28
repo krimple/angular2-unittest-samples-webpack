@@ -13,73 +13,80 @@ import {provide} from 'angular2/src/core/di/provider';
 import {BlogRoll} from './blog-roll';
 import {BlogEntry} from '../domain/blog-entry';
 import {BlogService} from '../services/blog-service';
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
 import {MarkdownService} from '../services/markdown-service';
 import {MockBackend} from 'angular2/src/http/backends/mock_backend';
-import {XHRBackend} from 'angular2/http';
-import {HTTP_PROVIDERS} from 'angular2/http';
-import {MockConnection} from 'angular2/src/http/backends/mock_backend';
-import {ResponseOptions} from 'angular2/http';
-import {Response} from 'angular2/http';
-import {Instruction} from 'angular2/router';
-import {Component} from 'angular2/core';
+import {Observable} from 'rxjs/Rx';
 
-import {ArrayObservable} from 'rxjs/observable/fromArray';
-import {Injector} from 'angular2/core';
-import {Http} from 'angular2/http';
+class MockMarkdownService extends MarkdownService {
+  toHtml(text: string): string {
+    return text;
+  }
+}
+class MockBlogService extends BlogService {
+  constructor() {
+    super(null);
+  }
+
+  getBlogs() {
+    console.log('sending fake answers!');
+    return Observable.of([
+      {
+        id: 26,
+        title: 'The title',
+        contentRendered: '<p><b>Hi there</b></p>',
+        contentMarkdown: '*Hi there*'
+      }
+    ]);
+  }
+}
 
 describe('Blog Roll Component...', () => {
-  var markdownService: MarkdownService,
-    mockBackend: MockBackend,
-    html: string;
+  var mockBlogService;
 
-  beforeEachProviders(() => [
-    HTTP_PROVIDERS,
-    provide(XHRBackend, {useClass: MockBackend}),
-    provide(MarkdownService, {useClass: MockMarkdownService}),
-    BlogService
-  ]);
+  beforeEach(() => {
+    mockBlogService = new MockBlogService();
+  });
 
-  beforeEach(
-    inject([MarkdownService, Injector], (_markdownService_, injector) => {
-      markdownService = _markdownService_;
-    }));
+  it('shows list of blog items by default - unit', () => {
+    let blogRoll: BlogRoll = new BlogRoll(null, null);
+    blogRoll.ngOnInit().then(
+      () => {
+        expect(blogRoll.blogs.length).toBe(1);
+        expect(blogRoll.blog).toBeUndefined();
+        expect(blogRoll.editing).toBe(false);
+      },
+      (error) => {
+        console.log('promise rejected, error is', error);
+      });
 
-  it('Shows list of blog items by default', injectAsync([TestComponentBuilder, BlogService],
-    (tcb, blogService) => {
-      spyOn(blogService, 'getBlogs')
-        .and.returnValue(ArrayObservable.of([
-        {
-          id             : 26,
-          title          : 'The title',
-          contentRendered: '<p><b>Hi there</b></p>',
-          contentMarkdown: '*Hi there*'
-        }
-      ]));
-      return tcb
-        .createAsync(BlogRoll)
-        .then((fixture) => {
-          fixture.detectChanges();
-          let nativeElement = fixture.nativeElement;
-          // start with editor panel hidden and blog roll visible
-          expect(nativeElement.querySelector('#blog-editor-panel') === null).toBe(true);
-          expect(nativeElement.querySelector('#blog-roll-panel') === null).toBe(false);
+  });
 
-          // make sure we have two rows - one for the heading and one for data
-          let trs = nativeElement.querySelectorAll('tr');
-          expect(trs.length).toBe(2);
+  it('shows list of blog items by default - tcb', injectAsync([TestComponentBuilder], (tcb) => {
+    return tcb
+      .overrideProviders(BlogRoll, [provide(BlogService, {useValue: mockBlogService})])
+      .createAsync(BlogRoll)
+      .then((fixture) => {
+        let nativeElement = fixture.nativeElement;
+        fixture.detectChanges();
 
-          let tdTitleContent = trs[1].children[1].innerHTML;
-          let tdRenderedContent = trs[1].children[2].innerHTML;
-          expect(tdTitleContent).toContain('The title');
-          expect(tdRenderedContent).toContain('Hi there');
-        });
-    }));
+        // we start with the blog roll panel visible
+        expect(fixture.componentInstance.editing).toBe(false);
+        expect(nativeElement.querySelector('#blog-editor-panel') === null).toBe(true);
+        expect(nativeElement.querySelector('#blog-roll-panel') === null).toBe(false);
+
+        // trigger the 'new' button and swap visible panels
+        fixture.nativeElement.querySelector('i.glyphicon-plus-sign').click();
+        fixture.detectChanges();
+        expect(fixture.componentInstance.editing).toBe(true);
+        expect(nativeElement.querySelector('#blog-editor-panel') === null).toBe(false);
+        expect(nativeElement.querySelector('#blog-roll-panel') === null).toBe(true);
+      });
+  }));
 
   it('should show blog editor div when New is clicked...',
     injectAsync([TestComponentBuilder], (tcb) => {
       return tcb
+        .overrideProviders(BlogRoll, [provide(BlogService, {useValue: mockBlogService})])
         .createAsync(BlogRoll)
         .then((fixture) => {
           let nativeElement = fixture.nativeElement;
@@ -90,7 +97,6 @@ describe('Blog Roll Component...', () => {
           expect(nativeElement.querySelector('#blog-editor-panel') === null).toBe(true);
           expect(nativeElement.querySelector('#blog-roll-panel') === null).toBe(false);
 
-
           // trigger the 'new' button and swap visible panels
           fixture.nativeElement.querySelector('i.glyphicon-plus-sign').click();
           fixture.detectChanges();
@@ -99,9 +105,11 @@ describe('Blog Roll Component...', () => {
           expect(nativeElement.querySelector('#blog-roll-panel') === null).toBe(true);
         });
     }));
+
   it('should open the editing pane if the edit button is clicked',
     injectAsync([TestComponentBuilder], (tcb) => {
       return tcb
+        .overrideProviders(BlogRoll, [provide(BlogService, {useValue: mockBlogService})])
         .createAsync(BlogRoll)
         .then((fixture) => {
           let nativeElement = fixture.nativeElement;
@@ -115,9 +123,5 @@ describe('Blog Roll Component...', () => {
         });
     }));
 });
-class MockMarkdownService extends MarkdownService {
-  toHtml(text: string): string {
-    return text;
-  }
-}
+
 

@@ -1,15 +1,12 @@
 import {Component} from 'angular2/core';
 import {CORE_DIRECTIVES} from 'angular2/common';
-import {Response} from 'angular2/http';
 import {BlogEntry} from '../domain/blog-entry.ts';
 import {BlogService} from '../services/blog-service';
 import {MarkdownService} from '../services/markdown-service';
 import {OnInit} from 'angular2/core';
-import {EventEmitter} from 'angular2/core';
-import {Output} from 'angular2/core';
 
 @Component({
-    bindings: [BlogService, MarkdownService],
+    providers: [BlogService, MarkdownService],
     template: `
    <div class="row">
      <div id="blog-editor-panel" class="col-sm-12" *ngIf="editing">
@@ -90,23 +87,28 @@ export class BlogRoll implements OnInit {
     }
 
     ngOnInit() {
-        this.loadBlogEntries();
+        return this.loadBlogEntries();
     }
 
     refresh() {
-        this.loadBlogEntries();
         this.blog = undefined;
+        return this.loadBlogEntries();
     }
 
     loadBlogEntries() {
+      return new Promise((resolve, reject) => {
         this.blogService.getBlogs().subscribe(
             (data: Array<BlogEntry>) => {
+                console.log('blog data arrived', data);
                 this.blogs = data;
+                resolve();
             },
             (error: Object) => {
                 console.log('error!', error);
+                reject(error);
             }
         );
+      });
     }
 
     render(blog: BlogEntry) {
@@ -128,12 +130,14 @@ export class BlogRoll implements OnInit {
     saveBlogEntry(blog: BlogEntry) {
         this.blogService.saveBlog(blog)
             .subscribe( () => {
-                this.editing = false;
-                this.blog = null;
-                this.refresh();
+              this.editing = false;
+              this.blog = null;
             },
             (err) => {
                 alert(`Blog save failed. ${err}`);
+            },
+            () => {
+                this.refresh();
             });
     }
 
