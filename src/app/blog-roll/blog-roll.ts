@@ -4,6 +4,7 @@ import {BlogEntry} from '../domain/blog-entry.ts';
 import {BlogService} from '../services/blog-service';
 import {MarkdownService} from '../services/markdown-service';
 import {OnInit} from 'angular2/core';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
     providers: [BlogService, MarkdownService],
@@ -96,19 +97,15 @@ export class BlogRoll implements OnInit {
     }
 
     loadBlogEntries() {
-      return new Promise((resolve, reject) => {
         this.blogService.getBlogs().subscribe(
             (data: Array<BlogEntry>) => {
                 console.log('blog data arrived', data);
                 this.blogs = data;
-                resolve();
             },
             (error: Object) => {
                 console.log('error!', error);
-                reject(error);
             }
         );
-      });
     }
 
     render(blog: BlogEntry) {
@@ -128,7 +125,7 @@ export class BlogRoll implements OnInit {
     }
 
     saveBlogEntry(blog: BlogEntry) {
-        this.blogService.saveBlog(blog)
+        return this.blogService.saveBlog(blog)
             .subscribe( () => {
               this.editing = false;
               this.blog = null;
